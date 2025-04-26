@@ -41,11 +41,16 @@ public class DB_GUI_Controller implements Initializable {
     private TableColumn<Person, Integer> tv_id;
     @FXML
     private TableColumn<Person, String> tv_fn, tv_ln, tv_department, tv_major, tv_email;
-    private final DbConnectivityClass cnUtil = new DbConnectivityClass();
+    @FXML
+    private Button addBtn, clearBtn, deleteBtn, editBtn;
+
+    private final DbConnectivityClass cnUtil = DbConnectivityClass.getInstance();
     private final ObservableList<Person> data = cnUtil.getData();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        editBtn.disableProperty().bind(tv.getSelectionModel().selectedItemProperty().isNull());
+        deleteBtn.disableProperty().bind(tv.getSelectionModel().selectedItemProperty().isNull());
         try {
             tv_id.setCellValueFactory(new PropertyValueFactory<>("id"));
             tv_fn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
@@ -61,7 +66,6 @@ public class DB_GUI_Controller implements Initializable {
 
     @FXML
     protected void addNewRecord() {
-
             Person p = new Person(first_name.getText(), last_name.getText(), department.getText(),
                     major.getText(), email.getText(), imageURL.getText());
             cnUtil.insertUser(p);
